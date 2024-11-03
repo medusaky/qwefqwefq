@@ -481,16 +481,29 @@ if savedKey then
     end
 end
 
-local function DT()
-    while true do
-        for _, obj in pairs(game:GetService("CoreGui"):GetDescendants()) do
-            if obj:IsA("TextLabel") then
-                if obj.Text and obj.Text:find("25ms") then
-                    game.Players.LocalPlayer:Kick("LoL")
-                end
-            end
+-- Anti-bypass script
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+
+-- Função de verificação
+local function checkForBypass()
+    for _, obj in pairs(CoreGui:GetDescendants()) do
+        if obj:IsA("TextLabel") and obj.Text:find("25ms") then
+            Players.LocalPlayer:Kick("LoL")
+            return true -- Bypass detectado
         end
-        wait(0.5)
+    end
+    return false -- Bypass não detectado
+end
+
+-- Execução rápida
+local function startAntiBypass()
+    while true do
+        if checkForBypass() then
+            break -- Para o loop se o bypass for detectado
+        end
+        wait(0.5) -- Intervalo de verificação
     end
 end
-spawn(DT)
+
+spawn(startAntiBypass)
